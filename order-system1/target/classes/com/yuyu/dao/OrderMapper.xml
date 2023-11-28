@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//dtd Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuyu.dao.OrderMapper">
+
+
+    <insert id="saveOrder" parameterType="Order">
+        insert into `order`(id,time,order_price) values (#{id},#{time},#{orderPrice});
+    </insert>
+
+    <delete id="removeOrder" >
+        delete from `order` where id = #{id};
+    </delete>
+
+    <update id="updateOrder" parameterType="order">
+        update `order` set time=#{time},order_price=#{orderPrice} where id=#{id};
+    </update>
+
+    <resultMap id="OrderAndGoods" type="order">
+        <result property="id" column="oid"/>
+        <result property="orderPrice" column="oprice"/>
+        <result property="time" column="otime"/>
+        <collection property="goods" ofType="goods">
+            <result property="id" column="gid"/>
+            <result property="name" column="gname"/>
+            <result property="num" column="ognum"/>
+        </collection>
+    </resultMap>
+    <resultMap id="OrderAndDropGood" type="order">
+        <result property="id" column="oid"/>
+        <result property="orderPrice" column="oprice"/>
+        <result property="time" column="otime"/>
+        <collection property="goods" ofType="goods">
+            <result property="name" column="gname"/>
+            <result property="num" column="gnum"/>
+        </collection>
+    </resultMap>
+
+    <select id="getOrderById" resultMap="OrderAndGoods">
+        SELECT o.id oid,o.time otime,o.order_price oprice,g.name gname,og.num ognum
+        FROM `order` o INNER JOIN order_goods og ON o.id=og.oid
+        INNER JOIN goods g ON g.id=og.gid where o.id = #{id}
+    </select>
+
+    <select id="getOrderByIdWithDropGood" resultMap="OrderAndDropGood">
+        SELECT o.id oid,o.time otime,o.order_price oprice,g.name gname,g.num gnum
+        FROM `order` o inner join drop_goods g on o.id=g.oid where o.id=#{id}
+    </select>
+
+    <select id="listOrder" resultMap="OrderAndGoods">
+        SELECT o.id oid,o.time otime,o.order_price oprice,g.name gname,og.num ognum
+        FROM `order` o INNER JOIN order_goods og ON o.id=og.oid
+        INNER JOIN goods g ON g.id=og.gid
+    </select>
+
+    <select id="listOrderByIds" resultMap="OrderAndGoods">
+        SELECT o.id oid,o.time otime,o.order_price oprice,g.name gname,og.num ognum
+        FROM `order` o INNER JOIN order_goods og ON o.id=og.oid
+        INNER JOIN goods g ON g.id=og.gid
+        <where>
+            <foreach collection="ids" item="id" separator="or">
+                o.id = #{id}
+            </foreach>
+        </where>
+    </select>
+
+
+
+    <select id="getOrderByIdSimple" resultType="order">
+        select id,`time`,order_price from `order` where id=#{id}
+    </select>
+
+    <select id="listOrderSimple" resultType="order">
+        select id,`time`,order_price from `order`
+    </select>
+
+</mapper>

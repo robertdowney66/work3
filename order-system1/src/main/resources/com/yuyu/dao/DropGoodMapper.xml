@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//dtd Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuyu.dao.DropGoodMapper">
+    <insert id="saveDropGood" parameterType="dropGood">
+        insert into drop_goods(name,num,oid) values (#{name},#{num},#{oid})
+    </insert>
+
+    <select id="listDropGoodByOid" resultType="dropGood">
+        select `name`,num,oid from drop_goods where oid = #{oid}
+    </select>
+</mapper>

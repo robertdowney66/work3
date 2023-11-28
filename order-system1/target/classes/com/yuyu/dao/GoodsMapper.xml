@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//dtd Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuyu.dao.GoodsMapper">
+    <insert id="saveGood" parameterType="goods" >
+        insert into goods(id,name,price,remain) values (#{id},#{name},#{price},#{remain});
+    </insert>
+
+    <delete id="removeGood" >
+        delete from goods where id=#{id};
+    </delete>
+
+    <update id="updateGood" parameterType="goods" >
+        update goods set name=#{name},price=#{price},remain=#{remain} where id=#{id};
+    </update>
+
+    <select id="getGoodById" resultType="goods" >
+        select id,name,price,remain from goods where id=#{id}
+    </select>
+
+    <select id="getGoodByName" resultType="goods" >
+        select id,name,price,remain from goods where name=#{name}
+    </select>
+
+    <select id="listGoodsByIds" parameterType="map" resultType="goods">
+        select id,name,price,remain from goods
+        <where>
+            <foreach collection="ids" item="id" separator="or">
+                id=#{id}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="listGoodsByNames" parameterType="map" resultType="goods">
+        select id,name,price,remain from goods
+        <where>
+            <foreach collection="names" item="name" separator="or">
+                name=#{name}
+            </foreach>
+        </where>
+    </select>
+
+    <select id="listGoods" resultType="Goods">
+        select id,name,price,remain from goods
+    </select>
+
+    <select id="listGoodsByLimit"  resultType="goods">
+        select id,name,price,remain from goods limit #{StartPage},#{EndPage};
+    </select>
+</mapper>

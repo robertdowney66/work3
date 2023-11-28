@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//dtd Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuyu.dao.OrderGoodsMapper">
+    <insert id="saveOrderGoods" parameterType="Map">
+        insert into order_goods(gid,oid,num) values (#{gid},#{oid},#{num})
+    </insert>
+
+    <delete id="removeOrderGoodsById" >
+        delete from order_goods where id = #{id}
+    </delete>
+
+    <select id="getNumByOidAndGid" resultType="goods">
+        select num from order_goods where oid=#{oid} and gid=#{gid}
+    </select>
+
+    <select id="listOrderGoodsByOid" resultType="orderGoods">
+        select id,gid,oid from order_goods where oid=#{oid}
+    </select>
+
+    <select id="listOrderGoodsByGid" resultType="orderGoods">
+        select id,gid,oid from order_goods where gid=#{gid}
+    </select>
+
+
+</mapper>
